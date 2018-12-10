@@ -14,11 +14,10 @@
 
 base() {
 ######################################
-# Purpose: 
+# Purpose: base utils for every VM
 #	
 #
 ###################################
-
 	echo "installing base utils"
 	sudo yum install -y epel-release
 	sudo yum install -y wget
@@ -28,9 +27,20 @@ base() {
 	# need to Cron the below via "rkhunter --check"
 	sudo yum install -y rkhunter	
 
+	# Webmin - help for sysadmin
 	wget http://prdownloads.sourceforge.net/webadmin/webmin-1.740-1.noarch.rpm
 	sudo rpm -ivh webmin-*.rpm
+
+	# fetch zip of custom config files
+	wget https://github.com/sglanger/dev-vagrant/raw/master/files.zip
+	unzip files.zip
+
+	# update sshd.conf to enable passwd
+	sudo mv /etc/ssh/sshd_config /etc/ssh/sshd_config.ori
+	sudo cp files/sshd_config /etc/ssh/sshd_config
+	sudo systemctl restart sshd
 }
+
 
 build() {
 ######################################
@@ -92,8 +102,9 @@ langs() {
 
 GUI() {
 ######################################
-# Purpose: 
-#	in- progress
+# Purpose: VNC running via X, then xRDP on VNC
+#
+#	in-progress
 #
 ###################################
 	echo "installing GUI"
@@ -118,8 +129,8 @@ GUI() {
 	clear
 
 	base
-	build
-	langs
+	#build
+	#langs
 	#dbase
 
 	# GUI
