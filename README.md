@@ -5,7 +5,7 @@ a Centos7 VM with a flexible Vagrant build script to alter the character of the 
 to use on Linux;
 - install vagrant and virtualbox on your local machine
 - pull down the files: Vagrantfile, install.sh, run_vagrant.sh
-- alter install.sh to taste
+- alter Vagrantfile and install.sh to taste
 - build the VM with "./run_vagrant.sh build"
 - have fun
 
