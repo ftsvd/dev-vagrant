@@ -15,7 +15,9 @@ Vagrant.configure("2") do |config|
   #config.vm.box_url = "https://github.com/2creatives/vagrant-centos/releases/download/v6.5.3/centos65-x86_64-20140116.box"
   config.vm.box_url = "https://cloud.centos.org/centos/7/vagrant/x86_64/images/CentOS-7-x86_64-Vagrant-1809_01.VirtualBox.box"
 
-  # Port forwardning
+  # Port forwarding - uncomment the items below you will actually use
+  # (as dictated by what is selecte to install in the install.sh )
+  # ssh port
   config.vm.network "forwarded_port", guest: 22, host: 2222
 
   #for RDP session -
