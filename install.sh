@@ -74,6 +74,13 @@ dbase() {
 	sudo postgresql-setup initdb
 	sudo systemctl start postgresql 
 	sudo systemctl enable postgresql
+
+	# update the below files to enable remote postgres connections
+	sudo mv /opt/PostgreSQL/9.2/data/pg_hba.conf /opt/PostgreSQL/9.2/data/pg_hba.conf.ori
+	sudo mv /opt/PostgreSQL/9.2/data/postgresql.conf /opt/PostgreSQL/9.2/data/postgresql.conf.ori
+    sudo cp files/postgres/postgresql.conf  /opt/PostgreSQL/9.2/data/
+	sudo cp files/postgres/pg_hba.conf /opt/PostgreSQL/9.2/data/
+	sudo systemctl restart 	postgresql-9.2
 }
 
 
