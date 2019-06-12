@@ -8,6 +8,7 @@
 
 Vagrant.configure("2") do |config|
 
+  config.vm..gui = false
 
   # sgl adds, see
   # https://cloud.centos.org/centos/7/vagrant/x86_64/images/
@@ -21,16 +22,16 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 22, host: 2222
 
   #for RDP session -
-  config.vm.network "forwarded_port", guest: 3389, host: 2179
-  config.vm.provider :virtualbox do |vb|
-  	vb.gui = true
-  end
+  #config.vm.network "forwarded_port", guest: 3389, host: 2179
+  #config.vm.provider :virtualbox do |vb|
+ # 	vb.gui = true
+ # end
 
   # for postgres
   # config.vm.network "forwarded_port", guest: 5432, host: 5432
 
   # for Webmin
-  config.vm.network "forwarded_port", guest: 10000, host: 10000
+  #config.vm.network "forwarded_port", guest: 10000, host: 10000
 
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the

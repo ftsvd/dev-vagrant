@@ -28,8 +28,15 @@ base() {
 	sudo yum install -y rkhunter	
 
 	# Webmin - help for sysadmin
-	wget http://prdownloads.sourceforge.net/webadmin/webmin-1.740-1.noarch.rpm
-	sudo rpm -ivh webmin-*.rpm
+	#wget http://prdownloads.sourceforge.net/webadmin/webmin-1.740-1.noarch.rpm
+	#sudo rpm -ivh webmin-*.rpm
+
+	# setup - rebuild it like iit was under RHEL 6
+	sudo yum install -y setuptool
+	sudo yum install -y system-config-securitylevel-tui
+	sudo yum install -y authconfig
+	sudo yum install -y ntsysv
+	sudo yum install -y NetworkManager-tui
 
 	# fetch zip of custom config files
 	wget https://github.com/sglanger/dev-vagrant/raw/master/files.zip
