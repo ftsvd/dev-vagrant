@@ -44,8 +44,12 @@ base() {
 
 	# update sshd.conf to enable passwd
 	sudo mv /etc/ssh/sshd_config /etc/ssh/sshd_config.ori
-	sudo cp files/sshd_config /etc/ssh/sshd_config
+	sudo cp /home/vagrant/files/sshd_config /etc/ssh/sshd_config
 	sudo systemctl restart sshd
+
+	# fix setup menu
+	sudo mv /etc/setuptool.d/99system-config-network-tui /etc/setuptool.d/99system-config-network-tui.ori
+	sudo cp /home/vagrant/files/99system-config-network-tui /etc/setuptool.d
 }
 
 
@@ -145,7 +149,7 @@ GUI() {
 	base
 	#build
 	#langs
-	#dbase
+	dbase
 
 	# GUI
 	# first time wants a passwd
