@@ -91,7 +91,7 @@ dbase() {
 	sudo mv /var/lib/pgsql/data/postgresql.conf /var/lib/pgsql/data/postgresql.conf.ori
     	sudo cp /home/vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
 	sudo cp /home/vagrant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
-	sudo systemctl restart 	postgresql-9.2
+	sudo systemctl restart 	postgresql
 }
 
 
