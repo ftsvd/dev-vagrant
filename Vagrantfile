@@ -7,9 +7,7 @@
 # you're doing.
 
 Vagrant.configure("2") do |config|
-
-  config.vm..gui = false
-
+ 
   # sgl adds, see
   # https://cloud.centos.org/centos/7/vagrant/x86_64/images/
   config.vm.box = "dev-vagrant"
@@ -19,16 +17,16 @@ Vagrant.configure("2") do |config|
   # Port forwarding - uncomment the items below you will actually use
   # (as dictated by what is selected to install in the install.sh )
   # ssh port
-  config.vm.network "forwarded_port", guest: 22, host: 2222
+  #config.vm.network "forwarded_port", guest: 22, host: 2222
 
   #for RDP session -
   #config.vm.network "forwarded_port", guest: 3389, host: 2179
   #config.vm.provider :virtualbox do |vb|
- # 	vb.gui = true
- # end
+  #	vb.gui = true
+  #end
 
   # for postgres
-  # config.vm.network "forwarded_port", guest: 5432, host: 5432
+  config.vm.network "forwarded_port", guest: 5432, host: 5433
 
   # for Webmin
   #config.vm.network "forwarded_port", guest: 10000, host: 10000
