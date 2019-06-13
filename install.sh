@@ -89,8 +89,8 @@ dbase() {
 	# update the below files to enable remote postgres connections
 	sudo mv /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf.ori
 	sudo mv /var/lib/pgsql/data/postgresql.conf /var/lib/pgsql/data/postgresql.conf.ori
-    sudo cp /home/vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
-	sudo cp /home/varant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
+    	sudo cp /home/vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
+	sudo cp /home/vagrant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
 	sudo systemctl restart 	postgresql-9.2
 }
 
