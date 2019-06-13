@@ -77,7 +77,7 @@ dbase() {
 # Purpose: install, create and start
 #	default postgres
 #
-# https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-centos-7
+# https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-cento
 ###################################
 
 	echo "installing postgres"
@@ -87,10 +87,10 @@ dbase() {
 	sudo systemctl enable postgresql
 
 	# update the below files to enable remote postgres connections
-	sudo mv /opt/PostgreSQL/9.2/data/pg_hba.conf /opt/PostgreSQL/9.2/data/pg_hba.conf.ori
-	sudo mv /opt/PostgreSQL/9.2/data/postgresql.conf /opt/PostgreSQL/9.2/data/postgresql.conf.ori
-    sudo cp files/postgres/postgresql.conf  /opt/PostgreSQL/9.2/data/
-	sudo cp files/postgres/pg_hba.conf /opt/PostgreSQL/9.2/data/
+	sudo mv /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf.ori
+	sudo mv /var/lib/pgsql/data/postgresql.conf /var/lib/pgsql/data/postgresql.conf.ori
+    sudo cp /home/vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
+	sudo cp /home/varant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
 	sudo systemctl restart 	postgresql-9.2
 }
 
