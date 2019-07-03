@@ -29,14 +29,11 @@ base() {
 	sudo yum install -y nmap
 	sudo yum install -y nano
 	sudo yum install -y unzip
+	sudo yum install -y net-tools
 	# need to Cron the below via "rkhunter --check"
-	sudo yum install -y rkhunter	
+	#sudo yum install -y rkhunter	
 
-	# Webmin - help for sysadmin
-	#wget http://prdownloads.sourceforge.net/webadmin/webmin-1.740-1.noarch.rpm
-	#sudo rpm -ivh webmin-*.rpm
-
-	# setup - rebuild it like iit was under RHEL 6
+	# setup - rebuild it like it was under RHEL 6
 	sudo yum install -y setuptool
 	sudo yum install -y system-config-securitylevel-tui
 	sudo yum install -y authconfig
@@ -49,19 +46,17 @@ base() {
 
 	# update sshd.conf to enable passwd
 	sudo mv /etc/ssh/sshd_config /etc/ssh/sshd_config.ori
-	sudo cp /home/vagrant/files/sshd_config /etc/ssh/sshd_config
+	sudo cp /vagrant/files/sshd_config /etc/ssh/sshd_config
 	sudo systemctl restart sshd
 
 	# fix setup menu
 	sudo mv /etc/setuptool.d/99system-config-network-tui /etc/setuptool.d/99system-config-network-tui.ori
-	sudo cp /home/vagrant/files/99system-config-network-tui /etc/setuptool.d
+	sudo cp /vagrant/files/99system-config-network-tui /etc/setuptool.d
 }
 
 
 ################# build tools
 #################
-
-
 
 docker() {
 ######################################
@@ -116,8 +111,8 @@ postgres() {
 	# update the below files to enable remote postgres connections
 	sudo mv /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf.ori
 	sudo mv /var/lib/pgsql/data/postgresql.conf /var/lib/pgsql/data/postgresql.conf.ori
-	sudo cp /home/vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
-	sudo cp /home/vagrant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
+	sudo cp /vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
+	sudo cp /vagrant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
 	sudo systemctl restart 	postgresql
 }
 
@@ -127,11 +122,11 @@ postgres() {
 
 dev() {
 ######################################
-# Purpose: for a developent VM want some 
+# Purpose: for a development VM want some 
 #		languages and maybe IDE's
 #
 ###################################
-	echo "installing langauges"
+	echo "installing languages"
 
 	# java, c, python,  and eclipse
 	sudo yum install -y java-1.8.0-openjdk
@@ -177,7 +172,7 @@ GUI() {
 
 orthanc() {
 ############################
-# Purpose: lay down the depencies 
+# Purpose: lay down the dependencies 
 #	Orthanc needs to run
 #
 ##############################
@@ -189,10 +184,10 @@ orthanc() {
 
 	# https://book.orthanc-server.com/users/docker.html
 	sudo docker pull jodogne/orthanc
-	sudo docker run -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins
+	sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins
 
 	# with postgres
-    #sudo docker run -p 4242:4242 -p 8042:8042 --rm -v /home/vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins
+    #sudo docker run -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins
 }
 
 
