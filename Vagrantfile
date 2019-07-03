@@ -22,6 +22,9 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 8042, host: 8042
   config.vm.network "forwarded_port", guest: 4242, host: 4242
 
+  # for postgres
+  config.vm.network "forwarded_port", guest: 5432, host: 5433
+
   # for MIRTH HL7
 
  
@@ -35,12 +38,7 @@ Vagrant.configure("2") do |config|
 
   end
 
-  # for postgres
-  config.vm.network "forwarded_port", guest: 5432, host: 5433
-
-  # for Webmin
-  #config.vm.network "forwarded_port", guest: 10000, host: 10000
-
+  
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
