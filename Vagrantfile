@@ -16,14 +16,24 @@ Vagrant.configure("2") do |config|
 
   # Port forwarding - uncomment the items below you will actually use
   # (as dictated by what is selected to install in the install.sh )
-  # ssh port
-  #config.vm.network "forwarded_port", guest: 22, host: 2222
+  # ssh port - not needed,  Vagrant does by default
 
+  # for orthanc
+  config.vm.network "forwarded_port", guest: 8042, host: 8042
+  config.vm.network "forwarded_port", guest: 4242, host: 4242
+
+  # for MIRTH HL7
+
+ 
   #for RDP session -
   #config.vm.network "forwarded_port", guest: 3389, host: 2179
   #config.vm.provider :virtualbox do |vb|
   #	vb.gui = true
   #end
+
+  config.vm.provider "vmware" do |vb|
+
+  end
 
   # for postgres
   config.vm.network "forwarded_port", guest: 5432, host: 5433

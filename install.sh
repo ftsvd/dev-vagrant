@@ -9,8 +9,13 @@
 # good ref
 # https://www.tecmint.com/things-to-do-after-minimal-rhel-centos-7-installation/
 #
+# NOte: people will say why this and not a Makefile? Or why not a Makefile +
+#	a provisioner like Puppet or ANsible? Becuase I can do
+#  more in Bash then in Make, so why use N frameworks when N - 1 (or 2) will do?
 ##################################################
 
+
+####################  base tools
 
 base() {
 ######################################
@@ -53,15 +58,34 @@ base() {
 }
 
 
-build() {
+################# build tools
+#################
+
+
+
+docker() {
 ######################################
-# Purpose: for a Dev VM, want tools to fetch
+# Purpose: for a Build VM, want tools to fetch
 #	from git and be able to build new VMs
 #
 ###################################
 	echo "installing build tools"
 	sudo yum install -y git
 	sudo yum install -y docker
+
+	sudo systemctl enable docker
+	sudo systemctl start docker
+}
+
+
+vagrant() {
+######################################
+# Purpose: for a Build VM, want tools to fetch
+#	from git and be able to build new VMs
+#
+###################################
+	echo "installing build tools"
+	sudo yum install -y git
 	sudo wget https://download.virtualbox.org/virtualbox/rpm/rhel/7/x86_64/VirtualBox-5.2-5.2.8_121009_el7-1.x86_64.rpm
 	sudo yum install -y VirtualBox-5.2-5.2.8_121009_el7-1.x86_64.rpm
 	sudo wget https://releases.hashicorp.com/vagrant/2.2.2/vagrant_2.2.2_x86_64.rpm
@@ -72,7 +96,10 @@ build() {
 }
 
 
-dbase() {
+#################### databases
+####################
+
+postgres() {
 ######################################
 # Purpose: install, create and start
 #	default postgres
@@ -89,16 +116,19 @@ dbase() {
 	# update the below files to enable remote postgres connections
 	sudo mv /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf.ori
 	sudo mv /var/lib/pgsql/data/postgresql.conf /var/lib/pgsql/data/postgresql.conf.ori
-    	sudo cp /home/vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
+	sudo cp /home/vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
 	sudo cp /home/vagrant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
 	sudo systemctl restart 	postgresql
 }
 
 
-langs() {
+################################### dev tools
+###################################
+
+dev() {
 ######################################
-# Purpose: 
-#	
+# Purpose: for a developent VM want some 
+#		languages and maybe IDE's
 #
 ###################################
 	echo "installing langauges"
@@ -116,6 +146,11 @@ langs() {
 	sudo unzip -d /opt/gradle gradle-3.4.1-bin.zip
 	sudo PATH=$PATH:/opt/gradle/gradle-3.4.1/bin
 }
+
+
+
+##############################  GUI and/or IDEs
+##############################
 
 
 GUI() {
@@ -137,19 +172,43 @@ GUI() {
 }
 
 
+####################### Top level appliances
+#######################
+
+orthanc() {
+############################
+# Purpose: lay down the depencies 
+#	Orthanc needs to run
+#
+##############################
+
+	postgres
+	docker
+
+	# copy over config files
+
+	# https://book.orthanc-server.com/users/docker.html
+	sudo docker pull jodogne/orthanc
+	sudo docker run -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins
+
+	# with postgres
+    #sudo docker run -p 4242:4242 -p 8042:8042 --rm -v /home/vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins
+}
+
 
 ############################
 # Main
-# Purpose: execute cmmd line args
+# Purpose: provisioner
+# Caller: parent Vagrantfile
+#
 # 
-# $1 command line arg for Case
 #############################
 	clear
-
+	# base is always called
 	base
-	#build
-	#langs
-	dbase
+
+	# then depending on role we call one or more others
+	orthanc
 
 	# GUI
 	# first time wants a passwd
