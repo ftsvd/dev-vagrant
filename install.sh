@@ -105,7 +105,7 @@ postgres() {
 	echo "installing postgres"
 	sudo yum install -y postgresql-server postgresql-contrib
 	sudo postgresql-setup initdb
-	sudo systemctl start postgresql 
+	#sudo systemctl start postgresql 
 	sudo systemctl enable postgresql
 
 	# update the below files to enable remote postgres connections
@@ -113,7 +113,7 @@ postgres() {
 	sudo mv /var/lib/pgsql/data/postgresql.conf /var/lib/pgsql/data/postgresql.conf.ori
 	sudo cp /vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
 	sudo cp /vagrant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
-	sudo systemctl restart 	postgresql
+	sudo systemctl start 	postgresql
 }
 
 
