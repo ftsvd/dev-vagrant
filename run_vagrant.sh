@@ -24,12 +24,12 @@ case "$1" in
 		vagrant up
 	;;
 
-	conn)
+	conn_r)
 		vagrant rdp &
 	;;
 
-	conn_s)
-		ssh -p 2222 -Y vagrant@localhost
+	conn)
+		ssh -Y -p 2222  vagrant@localhost
 	;;
 	
 	status)
