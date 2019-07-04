@@ -22,8 +22,8 @@ Vagrant.configure("2") do |config|
   config.vm.network "forwarded_port", guest: 8042, host: 8042
   config.vm.network "forwarded_port", guest: 4242, host: 4242
 
-  # for postgres
-  config.vm.network "forwarded_port", guest: 5432, host: 5433
+  # for VM postgres
+  config.vm.network "forwarded_port", guest: 5433, host: 5433
 
   # for MIRTH HL7
 

@@ -1,0 +1,9 @@
+"PostgreSQL" : {
+  "EnableIndex" : true,
+  "EnableStorage" : true,
+  "Host" : "127.0.0.1",
+  "Port" : 5433,
+  "Database" : "orthanc",
+  "Username" : "postgres",
+  "Password" : "pgpassword"
+}
