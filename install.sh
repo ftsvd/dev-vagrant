@@ -9,13 +9,15 @@
 # good ref
 # https://www.tecmint.com/things-to-do-after-minimal-rhel-centos-7-installation/
 #
-# NOte: people will say why this and not a Makefile? Or why not a Makefile +
+# NOte: people may ask why this and not a Makefile? Or why not a Makefile +
 #	a provisioner like Puppet or ANsible? Becuase I can do
-#  more in Bash then in Make, so why use N frameworks when N - 1 (or 2) will do?
+#  more in Bash then in Make, and going from  N frameworks to N - 1 (or 2) 
+#  reduces the moving parts and external dependencies
 ##################################################
 
 
 ####################  base tools
+####################  The parts below get installed on the base VM
 
 base() {
 ######################################
@@ -61,7 +63,7 @@ base() {
 docker() {
 ######################################
 # Purpose: for a Build VM, want tools to fetch
-#	from git and be able to build new VMs
+#	from git and be able to build Docker apps
 #
 ###################################
 	echo "installing build tools"
@@ -167,27 +169,26 @@ GUI() {
 }
 
 
-####################### Top level appliances
-#######################
+####################### Top level appliance DOckers here down
+####################### These, if installed, are pulled from DOckerhub and extend the
+####################### base VM w/out altering it
 
 orthanc() {
 ############################
 # Purpose: lay down the dependencies 
-#	Orthanc needs to run
-#
+#	Orthanc needs to run and then
+#	install Sebastian's Orthanc DOcker
 ##############################
 
 	postgres
 	docker
-
-	# copy over config files
 
 	# https://book.orthanc-server.com/users/docker.html
 	sudo docker pull jodogne/orthanc
 	sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins
 
 	# with postgres
-    #sudo docker run -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins
+    	#sudo docker run -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins
 }
 
 
