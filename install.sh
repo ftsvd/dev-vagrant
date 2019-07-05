@@ -183,17 +183,19 @@ orthanc() {
 	postgres
 	docker
 
+	# To make a persistent Orthanc dbase with postgres, first make a stub dbase 
+	sudo /usr/bin/createdb -U postgres orthanc
+	sudo /usr/bin/psql -U postgres -d orthanc < /vagrant/files/orthanc/orthanc.sql
+	
 	# https://book.orthanc-server.com/users/docker.html
 	sudo docker pull jodogne/orthanc
 	
 	# this runs Orthanc on SQLlite which goes poof when DOcker shuts down
-	sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins
+	#sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins 
 
-	# To persist with postgres, first make a stub dbase 
-	createdb -U postgres orthanc
-	psql -U postgres -d orthanc < /vagrant/files/orthanc/orthanc.sql
-	# then start Orthanc with a new conf file that point to Postgres
-    #sudo docker run -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins
+	# this starts Orthanc with a new conf file that point to Postgres
+	# but the Permissions are wrong and orthanc cannot read it
+    sudo docker run -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins 
 }
 
 
@@ -214,4 +216,7 @@ orthanc() {
 	# GUI
 	# first time wants a passwd
 	#/usr/bin/vncserver 
+	
+	exit
+	
 
