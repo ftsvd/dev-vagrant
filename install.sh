@@ -173,6 +173,26 @@ GUI() {
 ####################### These, if installed, are pulled from DOckerhub and extend the
 ####################### base VM w/out altering it
 
+mirth_hl7() {
+############################
+# Purpose:
+#
+#
+##########################
+
+	# we are assuming postgres, docker have already been called
+	postgres
+	docker
+	
+	# To make a persistent mirth dbase with postgres, first make a stub dbase 
+	sudo /usr/bin/createdb -U postgres mirth
+	sudo /usr/bin/psql -U postgres -d mirth < /vagrant/files/mirth/mirthdb.sql
+	
+	# and now start mirth
+	/vagrant/files/mirth_hl7/run_docker.sh build
+}
+
+
 orthanc() {
 ############################
 # Purpose: lay down the dependencies 
@@ -180,8 +200,8 @@ orthanc() {
 #	install Sebastian's Orthanc DOcker
 ##############################
 
-	postgres
-	docker
+	#postgres
+	#docker
 
 	# To make a persistent Orthanc dbase with postgres, first make a stub dbase 
 	sudo /usr/bin/createdb -U postgres orthanc
@@ -191,30 +211,12 @@ orthanc() {
 	sudo docker pull jodogne/orthanc
 	
 	# this runs Orthanc on SQLlite which goes poof when DOcker shuts down
-	sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins &
+	sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins 
 
 	# this starts Orthanc with a new conf file that point to Postgres
 	# but the Permissions are wrong and orthanc cannot read it
 	# orthanc.json must be root/root
     #sudo docker run -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins 
-}
-
-mirth_hl7() {
-############################
-# Purpose:
-#
-#
-##########################
-
-	# we are assuming postgres, docker have already been called
-	
-	# To make a persistent mirth dbase with postgres, first make a stub dbase 
-	sudo /usr/bin/createdb -U postgres mirth
-	sudo /usr/bin/psql -U postgres -d mirth < /vagrant/files/mirth/mirthdb.sql
-	
-	# and now start mirth
-	# /vagrant/files/mirth_hl7/run_docker.sh build
-	
 }
 
 
@@ -230,6 +232,7 @@ mirth_hl7() {
 	base
 
 	# then depending on role we call one or more others
+	mirth_hl7
 	orthanc
 
 	# GUI
