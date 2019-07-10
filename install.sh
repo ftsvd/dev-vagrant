@@ -28,6 +28,7 @@ base() {
 	echo "installing base utils"
 	sudo yum install -y epel-release
 	sudo yum install -y wget
+	sudo yum install -y curl
 	sudo yum install -y nmap
 	sudo yum install -y nano
 	sudo yum install -y unzip
@@ -68,7 +69,9 @@ docker() {
 ###################################
 	echo "installing build tools"
 	sudo yum install -y git
-	sudo yum install -y docker
+	#sudo yum install -y docker
+	# https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-centos-7
+	sudo curl -fsSL https://get.docker.com/ | sh
 
 	sudo systemctl enable docker
 	sudo systemctl start docker
@@ -208,15 +211,15 @@ orthanc() {
 	sudo /usr/bin/psql -U postgres -d orthanc < /vagrant/files/orthanc/orthanc.sql
 	
 	# https://book.orthanc-server.com/users/docker.html
-	sudo docker pull jodogne/orthanc
+	sudo docker pull jodogne/orthanc-plugins
 	
 	# this runs Orthanc on SQLlite which goes poof when DOcker shuts down
-	#sudo docker run --user root:root --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins 
+	#sudo docker run  --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins 
 
 	# this starts Orthanc with a new conf file that point to Postgres
 	# but the Permissions are wrong and orthanc cannot read it
 	# orthanc.json must be root/root
-    sudo docker run --user root:root --name orthanc -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins 
+    sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins 
 }
 
 
