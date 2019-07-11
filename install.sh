@@ -3,8 +3,8 @@
 ################################################
 # Author: SG Langer 12/11/2018
 #
-# Purpose: a scalable Vagrant build script for creating 
-#	different kinds of VMs (Dev, dbase, webserver, Ansible provisioner, etc)
+# Purpose: a scalable Vagrant install script for creating 
+#	different kinds of VMs (Dev, dbase, webserver, etc)
 #
 # good ref
 # https://www.tecmint.com/things-to-do-after-minimal-rhel-centos-7-installation/
@@ -120,8 +120,8 @@ postgres() {
 	sudo cp /vagrant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
 	sudo systemctl start 	postgresql
 
-	# and setup detault user
-	#sudo createuser 
+	# and setup detault user passwd
+	echo "postgres" | sudo passwd --stdin postgres 
 }
 
 
@@ -175,9 +175,9 @@ GUI() {
 }
 
 
-####################### Top level appliance DOckers here down
-####################### These, if installed, are pulled from DOckerhub and extend the
-####################### base VM w/out altering it
+####################### Top level appliance DOckers from here down
+####################### These, if installed, are pulled from DOckerhub as self-contained apps and extend the
+####################### base VM w/out altering it, but rely on base functions (storage, dbase)
 
 mirth_hl7() {
 ############################
@@ -186,19 +186,22 @@ mirth_hl7() {
 #
 ##########################
 
-	# we are assuming postgres, docker have already been called
+	# we are assuming postgres, docker have not already been called
 	postgres
 	docker
 	
 	# To make a persistent mirth dbase with postgres, first make a stub dbase 
-	sudo /usr/bin/createdb -U postgres mirth
-	sudo /usr/bin/psql -U postgres -d mirth < /vagrant/files/mirth/mirthdb.sql
+	sudo /usr/bin/createdb -U postgres mirthdb
+	sudo /usr/bin/psql -U postgres -d mirthdb < /vagrant/files/mirth/mirthdb.sql
 	
 	# and now get mirth DOcker
 	sudo docker pull brandonstevens/mirth-connect
 
-	# and start it
-	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm brandonstevens/mirth-connect
+	# and start it (using default Derby dbase)
+	#sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm brandonstevens/mirth-connect &
+
+	# or start it pointing to persistent Posgres
+	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm -v /vagrant/files/mirth/my_mirth.properties:/opt/mirth-connect/conf/mirth.properties:ro  brandonstevens/mirth-connect &
 }
 
 
@@ -216,7 +219,7 @@ orthanc() {
 	sudo /usr/bin/createdb -U postgres orthanc
 	sudo /usr/bin/psql -U postgres -d orthanc < /vagrant/files/orthanc/orthanc.sql
 	
-	# https://book.orthanc-server.com/users/docker.html
+	# Now get the DOcker image https://book.orthanc-server.com/users/docker.html
 	sudo docker pull jodogne/orthanc-plugins
 	
 	# this runs Orthanc on SQLlite which goes poof when DOcker shuts down
