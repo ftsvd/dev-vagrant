@@ -119,6 +119,9 @@ postgres() {
 	sudo cp /vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
 	sudo cp /vagrant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
 	sudo systemctl start 	postgresql
+
+	# and setup detault user
+	#sudo createuser 
 }
 
 
@@ -191,8 +194,11 @@ mirth_hl7() {
 	sudo /usr/bin/createdb -U postgres mirth
 	sudo /usr/bin/psql -U postgres -d mirth < /vagrant/files/mirth/mirthdb.sql
 	
-	# and now start mirth
-	/vagrant/files/mirth_hl7/run_docker.sh build
+	# and now get mirth DOcker
+	sudo docker pull brandonstevens/mirth-connect
+
+	# and start it
+	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm brandonstevens/mirth-connect
 }
 
 
