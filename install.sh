@@ -198,10 +198,10 @@ mirth_hl7() {
 	sudo docker pull brandonstevens/mirth-connect
 
 	# and start it (using default Derby dbase)
-	#sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm brandonstevens/mirth-connect &
+	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm brandonstevens/mirth-connect &
 
 	# or start it pointing to persistent Posgres
-	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm -v /vagrant/files/mirth/my_mirth.properties:/opt/mirth-connect/conf/mirth.properties:ro  brandonstevens/mirth-connect &
+	#sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm -v /vagrant/files/mirth/my_mirth.properties:/opt/mirth-connect/conf/mirth.properties:ro  brandonstevens/mirth-connect &
 }
 
 
