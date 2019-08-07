@@ -3,7 +3,7 @@
 ###############################################
 # Author: SG Langer Nov. 2018
 # Purpose:put all the Vagrant commands to build/run 
-#	this this VM in one easy place
+#	this VM in one easy place
 #	Follows same syntax as the Docker version
 ############################################
 
@@ -29,7 +29,8 @@ case "$1" in
 	;;
 
 	conn)
-		ssh -Y -p 2222  vagrant@localhost
+		# every rebuild changes the RSA key, so ....
+		ssh -Y -p 2222 -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no vagrant@localhost
 	;;
 	
 	status)

@@ -223,12 +223,12 @@ orthanc() {
 	sudo docker pull jodogne/orthanc-plugins
 	
 	# this runs Orthanc on SQLlite which goes poof when DOcker shuts down
-	#sudo docker run  --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins 
+	sudo docker run  --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins 
 
 	# this starts Orthanc with a new conf file that point to Postgres
 	# but the Permissions are wrong and orthanc cannot read it
 	# orthanc.json must be root/root
-    sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins 
+    #sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins 
 }
 
 
