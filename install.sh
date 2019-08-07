@@ -192,7 +192,7 @@ mirth_hl7() {
 	
 	# To make a persistent mirth dbase with postgres, first make a stub dbase 
 	sudo /usr/bin/createdb -U postgres mirthdb
-	sudo /usr/bin/psql -U postgres -d mirthdb < /vagrant/files/mirth/mirthdb.sql
+	sudo /usr/bin/psql -U postgres -d mirthdb < /vagrant/files/mirth_hl7/mirthdb.sql
 
 	# create and define the RSNAdb for the handling of HL7 data
 	#sudo /usr/bin/createdb -U postgres rsnadb
@@ -202,10 +202,10 @@ mirth_hl7() {
 	sudo docker pull brandonstevens/mirth-connect
 
 	# and start it (using default Derby dbase)
-	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm brandonstevens/mirth-connect &
+	#sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm brandonstevens/mirth-connect &
 
 	# or start it pointing to persistent Posgres
-	#sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm -v /vagrant/files/mirth/my_mirth.properties:/opt/mirth-connect/conf/mirth.properties:ro  brandonstevens/mirth-connect &
+	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm -v /vagrant/files/mirth/my_mirth.properties:/opt/mirth-connect/conf/mirth.properties:ro  brandonstevens/mirth-connect &
 }
 
 
