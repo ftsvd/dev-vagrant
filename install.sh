@@ -44,8 +44,8 @@ base() {
 	sudo yum install -y NetworkManager-tui
 
 	# fetch zip of custom config files
-	wget https://github.com/sglanger/dev-vagrant/raw/master/files.zip
-	unzip files.zip
+	wget https://github.com/sglanger/dev-vagrant/raw/master/files.tar
+	tar xvf files.tar
 
 	# update sshd.conf to enable passwd
 	sudo mv /etc/ssh/sshd_config /etc/ssh/sshd_config.ori
@@ -205,7 +205,7 @@ mirth_hl7() {
 	#sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm brandonstevens/mirth-connect &
 
 	# or start it pointing to persistent Posgres
-	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm -v /vagrant/files/mirth/my_mirth.properties:/opt/mirth-connect/conf/mirth.properties:ro  brandonstevens/mirth-connect &
+	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm -v /vagrant/files/mirth_hl7/my_mirth.properties:/opt/mirth-connect/conf/mirth.properties:ro  brandonstevens/mirth-connect &
 }
 
 
