@@ -204,10 +204,10 @@ mirth_hl7() {
 	# and now get mirth DOcker
 	sudo docker pull brandonstevens/mirth-connect
 
-	# and start it (using default Derby dbase)
+	# -1- and start it (using default Derby dbase)
 	#sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm brandonstevens/mirth-connect &
 
-	# or start it pointing to persistent Posgres
+	# -1a-  start it pointing to persistent Posgres
 	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm -v /home/vagrant/files/mirth_hl7/my_mirth.properties:/opt/mirth-connect/conf/mirth.properties:ro  brandonstevens/mirth-connect &
 }
 
@@ -229,12 +229,11 @@ orthanc() {
 	# Now get the DOcker image https://book.orthanc-server.com/users/docker.html
 	sudo docker pull jodogne/orthanc-plugins
 	
-	# this runs Orthanc on SQLlite which goes poof when DOcker shuts down
+	# -2- this runs Orthanc on SQLlite which goes poof when DOcker shuts down
 	sudo docker run  --name orthanc -p 4242:4242 -p 8042:8042 --rm jodogne/orthanc-plugins 
 
-	# this starts Orthanc with a new conf file that point to Postgres
-	# but the Permissions are wrong and orthanc cannot read it
-	# orthanc.json must be root/root
+	# -2a- this starts Orthanc with a new conf file that point to Postgres
+	# from https://book.orthanc-server.com
     #sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm -v /home/vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins 
 }
 
