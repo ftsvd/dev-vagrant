@@ -33,6 +33,7 @@ base() {
 	sudo yum install -y nano
 	sudo yum install -y unzip
 	sudo yum install -y net-tools
+	sudo yum install -y ftp
 	# need to Cron the below via "rkhunter --check"
 	#sudo yum install -y rkhunter	
 
@@ -43,18 +44,20 @@ base() {
 	sudo yum install -y ntsysv
 	sudo yum install -y NetworkManager-tui
 
+	# from here down we are in /home/vagrant
 	# fetch zip of custom config files
-	wget https://github.com/sglanger/dev-vagrant/raw/master/files.tar
+	#wget https://github.com/sglanger/dev-vagrant/raw/master/files.tar
+	cp /vagrant/files.tar /home/vagrant
 	tar xvf files.tar
 
 	# update sshd.conf to enable passwd
 	sudo mv /etc/ssh/sshd_config /etc/ssh/sshd_config.ori
-	sudo cp /vagrant/files/sshd_config /etc/ssh/sshd_config
+	sudo cp /home/vagrant/files/sshd_config /etc/ssh/sshd_config
 	sudo systemctl restart sshd
 
 	# fix setup menu
 	sudo mv /etc/setuptool.d/99system-config-network-tui /etc/setuptool.d/99system-config-network-tui.ori
-	sudo cp /vagrant/files/99system-config-network-tui /etc/setuptool.d
+	sudo cp /home/vagrant/files/99system-config-network-tui /etc/setuptool.d
 }
 
 
@@ -116,8 +119,8 @@ postgres() {
 	# update the below files to enable remote postgres connections
 	sudo mv /var/lib/pgsql/data/pg_hba.conf /var/lib/pgsql/data/pg_hba.conf.ori
 	sudo mv /var/lib/pgsql/data/postgresql.conf /var/lib/pgsql/data/postgresql.conf.ori
-	sudo cp /vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
-	sudo cp /vagrant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
+	sudo cp /home/vagrant/files/postgres/postgresql.conf  /var/lib/pgsql/data/
+	sudo cp /home/vagrant/files/postgres/pg_hba.conf /var/lib/pgsql/data/
 	sudo systemctl start 	postgresql
 
 	# and setup detault user passwd
@@ -192,11 +195,11 @@ mirth_hl7() {
 	
 	# To make a persistent mirth dbase with postgres, first make a stub dbase 
 	sudo /usr/bin/createdb -U postgres mirthdb
-	sudo /usr/bin/psql -U postgres -d mirthdb < /vagrant/files/mirth_hl7/mirthdb.sql
+	sudo /usr/bin/psql -U postgres -d mirthdb < /home/vagrant/files/mirth_hl7/mirthdb.sql.old
 
 	# create and define the RSNAdb for the handling of HL7 data
 	#sudo /usr/bin/createdb -U postgres rsnadb
-	#sudo /usr/bin/psql -U postgres -d rsnadb < /vagrant/files/mirth/rsnadb.sql
+	#sudo /usr/bin/psql -U postgres -d rsnadb < /home/vagrant/files/mirth_hl7/rsnadb.sql
 	
 	# and now get mirth DOcker
 	sudo docker pull brandonstevens/mirth-connect
@@ -205,7 +208,7 @@ mirth_hl7() {
 	#sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm brandonstevens/mirth-connect &
 
 	# or start it pointing to persistent Posgres
-	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm -v /vagrant/files/mirth_hl7/my_mirth.properties:/opt/mirth-connect/conf/mirth.properties:ro  brandonstevens/mirth-connect &
+	sudo docker run --name mirth-hl7  -p 8080:8080 -p 8443:8443 --rm -v /home/vagrant/files/mirth_hl7/my_mirth.properties:/opt/mirth-connect/conf/mirth.properties:ro  brandonstevens/mirth-connect &
 }
 
 
@@ -221,7 +224,7 @@ orthanc() {
 
 	# To make a persistent Orthanc dbase with postgres, first make a stub dbase 
 	sudo /usr/bin/createdb -U postgres orthanc
-	sudo /usr/bin/psql -U postgres -d orthanc < /vagrant/files/orthanc/orthanc.sql
+	sudo /usr/bin/psql -U postgres -d orthanc < /home/vagrant/files/orthanc/orthanc.sql
 	
 	# Now get the DOcker image https://book.orthanc-server.com/users/docker.html
 	sudo docker pull jodogne/orthanc-plugins
@@ -232,7 +235,7 @@ orthanc() {
 	# this starts Orthanc with a new conf file that point to Postgres
 	# but the Permissions are wrong and orthanc cannot read it
 	# orthanc.json must be root/root
-    #sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm -v /vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins 
+    #sudo docker run --name orthanc -p 4242:4242 -p 8042:8042 --rm -v /home/vagrant/files/orthanc/orthanc.json:/etc/orthanc/orthanc.json:ro jodogne/orthanc-plugins 
 }
 
 
