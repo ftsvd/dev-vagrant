@@ -29,8 +29,8 @@ Vagrant.configure("2") do |config|
   # https://wiki.postgresql.org/wiki/PostgreSQL_For_Development_With_Vagrant#Linux_Installation
   #config.vm.network "forwarded_port", guest: 5432, host: 5433, guest_ip: "10.0.2.15", host_ip: "127.0.0.1", protocol: "tcp"
   #config.vm.network "forwarded_port", guest: 5432, host: 5433, guest_ip: "10.0.2.15", host_ip: "10.0.2.2", protocol: "udp"
-  config.vm.network "forwarded_port", guest: 5432, host: 5433, protocol: "tcp"
-  config.vm.network "forwarded_port", guest: 5432, host: 5433, protocol: "udp"
+  config.vm.network "forwarded_port", guest: 5432, host: 5432, protocol: "tcp"
+  config.vm.network "forwarded_port", guest: 5432, host: 5432, protocol: "udp"
   
   # for MIRTH HL7
   config.vm.network "forwarded_port", guest: 8080, host: 8080
